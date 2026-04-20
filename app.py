@@ -6,42 +6,74 @@ from datetime import datetime, date
 # --- 🎨 THE ULTIMATE UI OVERRIDE ---
 st.set_page_config(page_title="Nikki's Budget Galaxy", layout="wide", page_icon="🚀")
 
-st.markdown("""
+# --- 🎭 THE MULTIVERSE THEME ENGINE ---
+# This part goes right after your imports and st.set_page_config
+
+theme_options = {
+    "Professional 💼": {
+        "bg": "#f8f9fa", "text": "#212529", "accent": "#007bff", 
+        "card": "#ffffff", "font": "sans-serif", "sidebar": "#343a40"
+    },
+    "Harry Potter ⚡": {
+        "bg": "linear-gradient(135deg, #1a1a1a, #2a0808)", "text": "#ffc107", 
+        "accent": "#740001", "card": "rgba(255, 255, 255, 0.05)", "font": "serif", "sidebar": "#1a1a1a"
+    },
+    "Stranger Things 🧇": {
+        "bg": "radial-gradient(circle, #2b0000, #000000)", "text": "#eeeeee", 
+        "accent": "#ff0000", "card": "rgba(255, 0, 0, 0.1)", "font": "monospace", "sidebar": "#000000"
+    },
+    "Barbie 🎀": {
+        "bg": "linear-gradient(135deg, #ffafbd, #ffc3a0)", "text": "#d01e64", 
+        "accent": "#ff69b4", "card": "rgba(255, 255, 255, 0.6)", "font": "cursive", "sidebar": "#ff85a2"
+    },
+    "One Piece 🏴‍☠️": {
+        "bg": "linear-gradient(135deg, #1a5276, #f4d03f)", "text": "#ffffff", 
+        "accent": "#e74c3c", "card": "rgba(0, 0, 0, 0.3)", "font": "sans-serif", "sidebar": "#1a5276"
+    }
+}
+
+# 1. Create the UI for theme selection in the sidebar
+st.sidebar.markdown("### 🎨 UI Customization")
+selected_theme_name = st.sidebar.selectbox("Choose Your Universe:", list(theme_options.keys()))
+style = theme_options[selected_theme_name]
+
+# 2. Inject the Dynamic CSS based on the choice
+st.markdown(f"""
     <style>
-    /* Main Background */
-    .stApp {
-        background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-        color: #ffffff;
-    }
+    /* Main App Background */
+    .stApp {{
+        background: {style['bg']};
+        color: {style['text']} !important;
+        font-family: {style['font']} !important;
+    }}
     
-    /* Card-like containers for metrics */
-    div[data-testid="stMetricValue"] {
-        background: rgba(255, 255, 255, 0.05);
-        padding: 20px;
-        border-radius: 15px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-    }
-
     /* Sidebar Styling */
-    section[data-testid="stSidebar"] {
-        background-color: rgba(0, 0, 0, 0.5) !important;
-    }
+    [data-testid="stSidebar"] {{
+        background-color: {style['sidebar']} !important;
+    }}
 
-    /* Custom Buttons */
-    .stButton>button {
-        background: linear-gradient(45deg, #ff00cc, #3333ff);
-        color: white;
+    /* Metrics and Data Cards */
+    div[data-testid="stMetricValue"], .stDataFrame, div[data-testid="stExpander"] {{
+        background: {style['card']} !important;
+        border: 1px solid {style['accent']};
+        border-radius: 15px;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 15px {style['accent']}33;
+    }}
+
+    /* Headers and Text */
+    h1, h2, h3, p {{
+        color: {style['text']} !important;
+    }}
+
+    /* Buttons */
+    .stButton>button {{
+        background-color: {style['accent']} !important;
+        color: white !important;
+        border-radius: 10px;
         border: none;
-        border-radius: 20px;
-        padding: 10px 25px;
-        transition: 0.3s;
-        font-weight: bold;
-    }
-    .stButton>button:hover {
-        transform: scale(1.05);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.4);
-    }
+        box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+    }}
     </style>
     """, unsafe_allow_html=True)
 
