@@ -125,6 +125,7 @@ if menu == "🛰️ Dashboard":
         st.info("Your galaxy is empty! Add some data in the 'Log Transaction' tab. 🌌")
 
 # --- 💸 LOGGING ---
+# --- 💸 LOGGING SECTION ---
 elif menu == "💸 Log Transaction":
     st.title("Add New Transaction 📝")
     with st.container():
@@ -137,12 +138,37 @@ elif menu == "💸 Log Transaction":
             amt = st.number_input("Amount (₹)", min_value=0.0)
             dt = st.date_input("Date", date.today())
         
-        if st.button("Save Entry to Cloud 🚀"):
+        # THIS IS THE BUTTON PART WHERE THE MAGIC HAPPENS!
+        if st.button("Save Entry to Universe 🚀"):
             new_row = pd.DataFrame([[dt, t_type, cat, sub, amt]], columns=df.columns)
             df = pd.concat([df, new_row], ignore_index=True)
             df.to_csv(f"{active_profile.lower().replace(' ', '_')}_data.csv", index=False)
-            st.balloons()
-            st.success("Entry added to your universe!")
+            
+            # --- ✨ THEME-BASED CELEBRATIONS ---
+            if selected_theme_name == "Harry Potter ⚡":
+                st.snow() # Looks like magical dust!
+                st.toast("Expecto Patronum! Savings Protected!", icon="🪄")
+                st.markdown("<h1 style='text-align: center;'>🪄✨🪄✨🪄</h1>", unsafe_allow_html=True)
+                
+            elif selected_theme_name == "Stranger Things 🧇":
+                st.toast("Friends don't lie... and they also save money!", icon="🧇")
+                st.warning("The Upside Down is impressed with your budget.")
+                st.markdown("<h1 style='text-align: center;'>🧇🚲🧇🚲🧇</h1>", unsafe_allow_html=True)
+                
+            elif selected_theme_name == "Barbie 🎀":
+                st.balloons()
+                st.toast("You're a budget girl in a Barbie world!", icon="💖")
+                st.markdown("<h1 style='text-align: center;'>💅💖🎀💄✨</h1>", unsafe_allow_html=True)
+                
+            elif selected_theme_name == "One Piece 🏴‍☠️":
+                st.balloons()
+                st.toast("You're the King of the Budgets!", icon="🍖")
+                st.markdown("<h1 style='text-align: center;'>🏴‍☠️🍖👒⚓💰</h1>", unsafe_allow_html=True)
+                
+            else:
+                st.balloons() # Default for Professional/Cosmic
+            
+            st.success("Entry added to your universe! Check the Dashboard. ✨")
 
 # --- 🎯 SAVINGS GOAL ---
 elif menu == "🎯 Savings Goal":
