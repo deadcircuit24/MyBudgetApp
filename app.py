@@ -115,9 +115,30 @@ elif menu == "💸 Log Transaction":
 # --- 🎯 SAVINGS GOAL ---
 elif menu == "🎯 Savings Goal":
     st.title("Financial Targets 🎯")
-    goal = st.text_input("What are we saving for? (e.g. New Laptop, Goa Trip)")
-    target = st.number_input("Target Amount (₹)", min_value=1.0)
+    goal_name = st.text_input("What are we saving for?", "New Laptop")
+    target_amt = st.number_input("Target Amount (₹)", min_value=1.0, value=5000.0)
     
     if st.button("Analyze My Budget"):
-        st.write(f"Analyzing your spending habits for **{goal}**...")
-        st.warning("⚠️ PRO TIP: You spend a lot on 'Food'. If you skip 3 outside meals a week, you'll reach this goal 22 days faster!")
+        # 1. Get current balance
+        total_income = df[df['Type'] == 'Income']['Amount'].sum()
+        total_expense = df[df['Type'] == 'Expense']['Amount'].sum()
+        current_savings = total_income - total_expense
+        
+        # 2. Calculate gap
+        amount_needed = target_amt - current_savings
+        
+        if amount_needed <= 0:
+            st.balloons()
+            st.success(f"Bestie, you already have enough for {goal_name}! Go get it! 🛍️")
+        else:
+            st.info(f"Analyzing your habits to find that extra ₹{amount_needed}...")
+            
+            # 3. Find the biggest expense category
+            if not df[df['Type'] == 'Expense'].empty:
+                top_cat = df[df['Type'] == 'Expense'].groupby('Category')['Amount'].sum().idxmax()
+                top_cat_amt = df[df['Type'] == 'Expense'].groupby('Category')['Amount'].sum().max()
+                
+                # 4. Give dynamic advice
+                st.warning(f"⚠️ PRO TIP: You've spent ₹{top_cat_amt} on **{top_cat}**. If you cut your {top_cat} spending by 50%, you'd reach your goal much faster!")
+            else:
+                st.write("Start logging expenses so I can tell you what to cut! ✂️")
